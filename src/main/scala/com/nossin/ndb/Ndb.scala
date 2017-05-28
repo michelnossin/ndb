@@ -14,6 +14,9 @@ class Ndb extends Actor {
   override def receive = {
     case SetRequest(key, value) => {
       log.info("received SetRequest - key: {} value: {}", key, value);
-      map.put(key, value) } case o => log.info("received unknown message: {}", o);
+      map.put(key, value) }
+    case o => log.info("received unknown message: {}", o);
   }
 }
+
+
