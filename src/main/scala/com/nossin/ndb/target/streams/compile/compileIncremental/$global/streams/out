@@ -1,0 +1,81 @@
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Initial source changes: [0m
+[0m[[0mdebug[0m] [0m[naha] 	removed:Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	added: Set(/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/HelloWorld.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] 	modified: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated products: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] External API changes: API Changes: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Modified binary dependencies: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set(/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/HelloWorld.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Sources indirectly invalidated by:[0m
+[0m[[0mdebug[0m] [0m[naha] 	product: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	binary dep: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	external source: Set()[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/HelloWorld.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/HelloWorld.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala, /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Recompiling all 3 sources: invalidated sources (3) exceeded 50.0% of all sources[0m
+[0m[[0minfo[0m] [0mCompiling 3 Scala sources to /Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/target/scala-2.10/classes...[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.15:component from component compiler for Scala 2.10.6[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.15:component from component compiler for Scala 2.10.6[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 62e85682, interfacing (CompilerInterface) with Scala compiler version 2.10.6[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/classes:/Users/michelnossin/.sbt/boot/scala-2.10.6/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/target/scala-2.10/classes[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/HelloWorld.scala:2: not found: object akka[0m
+[0m[[31merror[0m] [0mimport akka.actor.ActorSystem [0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/HelloWorld.scala:5: not found: value ActorSystem[0m
+[0m[[31merror[0m] [0m	val actorSystem = ActorSystem("HelloWorld") [0m
+[0m[[31merror[0m] [0m	                  ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:3: object messages is not a member of package com.nossin.ndb[0m
+[0m[[31merror[0m] [0mimport com.nossin.ndb.messages.SetRequest[0m
+[0m[[31merror[0m] [0m                      ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:5: not found: object akka[0m
+[0m[[31merror[0m] [0mimport akka.actor.Actor[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:6: not found: object akka[0m
+[0m[[31merror[0m] [0mimport akka.event.Logging[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:10: not found: type Actor[0m
+[0m[[31merror[0m] [0mclass Ndb extends Actor {[0m
+[0m[[31merror[0m] [0m                  ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:12: not found: value Logging[0m
+[0m[[31merror[0m] [0m  val log = Logging(context.system, this);[0m
+[0m[[31merror[0m] [0m            ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:14: missing parameter type for expanded function[0m
+[0m[[31merror[0m] [0mThe argument types of an anonymous function must be fully known. (SLS 8.5)[0m
+[0m[[31merror[0m] [0mExpected type was: ?[0m
+[0m[[31merror[0m] [0m  override def receive = {[0m
+[0m[[31merror[0m] [0m                         ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:15: not found: value SetRequest[0m
+[0m[[31merror[0m] [0m    case SetRequest(key, value) => {[0m
+[0m[[31merror[0m] [0m         ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/Ndb.scala:17: not found: value key[0m
+[0m[[31merror[0m] [0m      map.put(key, value) }[0m
+[0m[[31merror[0m] [0m              ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala:3: not found: object akka[0m
+[0m[[31merror[0m] [0mimport akka.actor.{Actor, Status}[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala:5: not found: type Actor[0m
+[0m[[31merror[0m] [0mclass ScalaPongActor extends Actor {[0m
+[0m[[31merror[0m] [0m                             ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala:6: not found: type Receive[0m
+[0m[[31merror[0m] [0m  override def receive: Receive = {[0m
+[0m[[31merror[0m] [0m                        ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala:6: missing parameter type for expanded function[0m
+[0m[[31merror[0m] [0mThe argument types of an anonymous function must be fully known. (SLS 8.5)[0m
+[0m[[31merror[0m] [0mExpected type was: <error>[0m
+[0m[[31merror[0m] [0m  override def receive: Receive = {[0m
+[0m[[31merror[0m] [0m                                  ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala:7: not found: value sender[0m
+[0m[[31merror[0m] [0m    case "Ping" => sender() ! "Pong"[0m
+[0m[[31merror[0m] [0m                   ^[0m
+[0m[[31merror[0m] [0m/Users/michelnossin/git/ndb/src/main/scala/com/nossin/ndb/ScalaPongActor.scala:8: not found: value sender[0m
+[0m[[31merror[0m] [0m    case _ => sender() ! Status.Failure(new Exception("unknown message"))[0m
+[0m[[31merror[0m] [0m              ^[0m
+[0m[[31merror[0m] [0m16 errors found[0m
+[0m[[0mdebug[0m] [0mCompilation failed (CompilerInterface)[0m
+[0m[[31merror[0m] [0m(compile:[31mcompileIncremental[0m) Compilation failed[0m
