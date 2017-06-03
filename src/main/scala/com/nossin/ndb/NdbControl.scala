@@ -6,7 +6,8 @@ import akka.pattern.ask
 
 import scala.concurrent.duration._
 import akka.util.Timeout
-import com.nossin.ndb.custommailbox.ProxyActor
+import com.nossin.ndb.custommailbox.{Logger, PriorityActor, ProxyActor}
+import com.nossin.ndb.messages.CustomControlMessage
 import com.nossin.ndb.messages.Messages.Start
 
 object NdbControl extends App {
@@ -39,5 +40,23 @@ object NdbControl extends App {
   print("Start custom mailbox")
   actor1 !  (3,proxyActor)
   actor2 !  (5,proxyActor)
+
+  //Priomailbox events being processed are run in order determined by our prio mailbox
+  val myPriorityActor = actorSystem.actorOf(Props[PriorityActor].withDispatcher("prio-dispatcher"))
+  myPriorityActor ! 6.0
+  myPriorityActor ! 1
+  myPriorityActor ! 5.0
+  myPriorityActor ! 3
+  myPriorityActor ! "Hello"
+  myPriorityActor ! 5
+  myPriorityActor ! "I am priority actor"
+  myPriorityActor ! "I process string messages first,then integer, long and others"
+
+  //Control aware mailbox, we can prio a particular event
+  val actor = actorSystem.actorOf(Props[Logger].withDispatcher("control-aware-dispatcher"))
+  actor ! "hello"
+  actor ! "how are"
+  actor ! "you?"
+  actor ! CustomControlMessage
 
 } 
