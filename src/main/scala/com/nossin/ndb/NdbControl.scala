@@ -1,13 +1,13 @@
 package com.nossin.ndb
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorSystem, PoisonPill, Props}
 
 import scala.concurrent.Await
 import akka.pattern.ask
 
 import scala.concurrent.duration._
 import akka.util.Timeout
-import com.nossin.ndb.custommailbox.{Logger, PriorityActor, ProxyActor}
-import com.nossin.ndb.messages.CustomControlMessage
+import com.nossin.ndb.custommailbox.{BecomeActor, Logger, PriorityActor, ProxyActor}
+import com.nossin.ndb.messages.{CustomControlMessage, Stop}
 import com.nossin.ndb.messages.Messages.Start
 
 object NdbControl extends App {
@@ -53,10 +53,24 @@ object NdbControl extends App {
   myPriorityActor ! "I process string messages first,then integer, long and others"
 
   //Control aware mailbox, we can prio a particular event
-  val actor = actorSystem.actorOf(Props[Logger].withDispatcher("control-aware-dispatcher"))
-  actor ! "hello"
-  actor ! "how are"
-  actor ! "you?"
-  actor ! CustomControlMessage
+  val logActor = actorSystem.actorOf(Props[Logger].withDispatcher("control-aware-dispatcher"))
+  logActor ! "hello"
+  logActor ! "how are"
+  logActor ! "you?"
+  logActor ! CustomControlMessage
 
-} 
+  //Become actor, based on state change behavioud, for example let this actor handle string OR numbers
+  val becomeUnBecome = actorSystem.actorOf(Props[BecomeActor])
+  becomeUnBecome ! true
+  becomeUnBecome ! "Hello how are you?"
+  becomeUnBecome ! false
+  becomeUnBecome ! 1100
+  becomeUnBecome ! true
+  becomeUnBecome ! "What do u do?"
+
+  //Stop , we build this into the become actor
+  becomeUnBecome ! Stop
+  becomeUnBecome ! "stil there?"
+  becomeUnBecome ! PoisonPill  //buils in kill message
+  becomeUnBecome ! "not any more"
+}
