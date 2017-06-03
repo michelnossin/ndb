@@ -1,9 +1,13 @@
 package com.nossin.ndb
 import akka.actor.{ActorSystem, Props}
+
 import scala.concurrent.Await
 import akka.pattern.ask
+
 import scala.concurrent.duration._
 import akka.util.Timeout
+import com.nossin.ndb.custommailbox.ProxyActor
+import com.nossin.ndb.messages.Messages.Start
 
 object NdbControl extends App {
 	val actorSystem = ActorSystem("NdbControl")
@@ -11,10 +15,8 @@ object NdbControl extends App {
 
   //Call Actor which prints stuff:w
 	val sumActor = actorSystem.actorOf(Props(classOf[SumActor]),"SumActor")
-	val result = sumActor ! 3
-	print ("the result is " + result)
-  val result2 = sumActor ! 6
-  print ("the result2 is " + result2)
+	sumActor ! 3
+  sumActor ! 6
   print ("This actor lives here: " + sumActor.path)
 
   //Call Actor which returns to sender
@@ -24,5 +26,18 @@ object NdbControl extends App {
   val future = (FibActor? 10).mapTo[Int]
   val fiboacciNumber = Await.result(future, 10 seconds)
   println(fiboacciNumber)
+
+  //Communcate actor to actor
+  val randomNumberGenerator = actorSystem.actorOf(Props[RandomNumberGeneratorActor], "randomNumberGeneratorActor")
+  val queryActor = actorSystem.actorOf(Props[QueryActor], "queryActor")
+  queryActor ! Start(randomNumberGenerator)
+
+  //Custom mailbox, preventing actor with wrong id.
+  val proxyActor = actorSystem.actorOf(Props[ProxyActor].withDispatcher("custom-dispatcher"))
+  val actor1 = actorSystem.actorOf(Props[SumActor],"xyz")
+  val actor2 = actorSystem.actorOf(Props[SumActor],"MyActor")
+  print("Start custom mailbox")
+  actor1 !  (3,proxyActor)
+  actor2 !  (5,proxyActor)
 
 } 
