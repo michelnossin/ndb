@@ -8,4 +8,6 @@ object Messages {
   case class Done(randomNumber: Int)
   case object GiveMeRandomNumber
   case class Start(actorRef: ActorRef)
+  case object CreateChild
+  case class Greet(msg: String)
 }

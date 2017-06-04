@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 import akka.util.Timeout
 import com.nossin.ndb.custommailbox.{BecomeActor, Logger, PriorityActor, ProxyActor}
 import com.nossin.ndb.messages.{CustomControlMessage, Stop}
-import com.nossin.ndb.messages.Messages.Start
+import com.nossin.ndb.messages.Messages.{CreateChild, Start}
 
 object NdbControl extends App {
 	val actorSystem = ActorSystem("NdbControl")
@@ -71,6 +71,10 @@ object NdbControl extends App {
   //Stop , we build this into the become actor
   becomeUnBecome ! Stop
   becomeUnBecome ! "stil there?"
-  becomeUnBecome ! PoisonPill  //buils in kill message
-  becomeUnBecome ! "not any more"
+  //becomeUnBecome ! PoisonPill  //buils in kill message
+  //becomeUnBecome ! "not any more"
+
+  //PArent Child actors, parent create child, we call parent
+  val parent = actorSystem.actorOf(Props[ParentActor], "parent")
+  parent ! CreateChild
 }
