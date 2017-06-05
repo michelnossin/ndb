@@ -9,7 +9,7 @@ import scala.concurrent.duration._
 import akka.util.Timeout
 import com.nossin.ndb.custommailbox.{BecomeActor, Logger, PriorityActor, ProxyActor}
 import com.nossin.ndb.messages.{CustomControlMessage, Stop}
-import com.nossin.ndb.messages.Messages.{CreateChild, Error, Send, Start, StopActor}
+import com.nossin.ndb.messages.Messages.{CreateChild, Error, Kill, Send, Service, Start, StopActor}
 
 object NdbControl extends App {
 	val actorSystem = ActorSystem("NdbControl")
@@ -98,4 +98,10 @@ object NdbControl extends App {
   //Test all supervisor, it has another superviso policy which restarts depended childs
   val supervisorAll = actorSystem.actorOf(Props[SupervisorAllActor], "supervisorall")
   supervisorAll ! "Start"
+
+  //DeathWatchActor ,  check status child and monitor if its terminated
+  val deathWatchActor = actorSystem.actorOf(Props[DeathWatchActor],"parentService")
+  deathWatchActor ! Service
+  deathWatchActor ! Kill
+
 }

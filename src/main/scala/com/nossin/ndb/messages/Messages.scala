@@ -15,4 +15,6 @@ object Messages {
   case class StopActor(actorRef: ActorRef)
   case object Send
   case class Response(x: Int)
+  case object Service
+  case object Kill
 }
