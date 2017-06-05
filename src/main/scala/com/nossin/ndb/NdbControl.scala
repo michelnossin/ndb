@@ -94,4 +94,8 @@ object NdbControl extends App {
   bigParent ! CreateChild
   bigParent ! CreateChild
   bigParent ! Send
+
+  //Test all supervisor, it has another superviso policy which restarts depended childs
+  val supervisorAll = actorSystem.actorOf(Props[SupervisorAllActor], "supervisorall")
+  supervisorAll ! "Start"
 }

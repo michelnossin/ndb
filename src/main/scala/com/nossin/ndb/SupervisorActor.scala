@@ -8,6 +8,7 @@ import scala.concurrent.duration._
   * Created by michelnossin on 05-06-17.
   */
 class SupervisorActor extends Actor {
+  //One for One , only restart failed actor not any others/siblings. useful if actors are independed.
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute)
     {
       case _: ArithmeticException => Restart
