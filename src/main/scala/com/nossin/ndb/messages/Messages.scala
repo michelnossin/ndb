@@ -10,4 +10,9 @@ object Messages {
   case class Start(actorRef: ActorRef)
   case object CreateChild
   case class Greet(msg: String)
+  case object Error
+  case class DoubleValue(x: Int)
+  case class StopActor(actorRef: ActorRef)
+  case object Send
+  case class Response(x: Int)
 }

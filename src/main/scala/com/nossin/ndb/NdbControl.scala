@@ -1,5 +1,6 @@
 package com.nossin.ndb
-import akka.actor.{ActorSystem, PoisonPill, Props}
+//import com.nossin.ndb.SupervisorActor
+import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
 
 import scala.concurrent.Await
 import akka.pattern.ask
@@ -8,7 +9,7 @@ import scala.concurrent.duration._
 import akka.util.Timeout
 import com.nossin.ndb.custommailbox.{BecomeActor, Logger, PriorityActor, ProxyActor}
 import com.nossin.ndb.messages.{CustomControlMessage, Stop}
-import com.nossin.ndb.messages.Messages.{CreateChild, Start}
+import com.nossin.ndb.messages.Messages.{CreateChild, Error, Send, Start, StopActor}
 
 object NdbControl extends App {
 	val actorSystem = ActorSystem("NdbControl")
@@ -77,4 +78,20 @@ object NdbControl extends App {
   //PArent Child actors, parent create child, we call parent
   val parent = actorSystem.actorOf(Props[ParentActor], "parent")
   parent ! CreateChild
+
+  //Supervisor and lifecycle hooks for actors (post/pre sytart or stop)
+  //This will show error as expected. It also shows the child gets restarted also after error
+  val supervisor = actorSystem.actorOf(Props[SupervisorActor], "supervisor")
+  val childFuture = supervisor ? (Props(new LifeCycleActor), "LifeCycleActor")
+  val child = Await.result(childFuture.mapTo[ActorRef], 2 seconds)
+  child ! Error
+  Thread.sleep(1000)
+  supervisor ! StopActor(child)
+
+  //Bigparent with multiple childs
+  val bigParent = actorSystem.actorOf(Props[BigParentActor], "bigparent")
+  bigParent ! CreateChild
+  bigParent ! CreateChild
+  bigParent ! CreateChild
+  bigParent ! Send
 }
