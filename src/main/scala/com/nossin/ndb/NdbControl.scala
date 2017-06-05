@@ -4,11 +4,13 @@ import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
 
 import scala.concurrent.Await
 import akka.pattern.ask
+import akka.routing.ConsistentHashingRouter.{ConsistentHashMapping, ConsistentHashableEnvelope}
 import akka.routing._
 
 import scala.concurrent.duration._
 import akka.util.Timeout
 import com.nossin.ndb.custommailbox.{BecomeActor, Logger, PriorityActor, ProxyActor}
+import com.nossin.ndb.messages.Hashing.{Entry, Evict, Get}
 import com.nossin.ndb.messages.{CustomControlMessage, Stop}
 import com.nossin.ndb.messages.Messages.{CreateChild, Error, Kill, Send, Service, Start, StopActor}
 
@@ -72,8 +74,8 @@ object NdbControl extends App {
 
   //Stop , we build this into the become actor
   becomeUnBecome ! Stop
-  becomeUnBecome ! "stil there?"
-  //becomeUnBecome ! PoisonPill  //buils in kill message
+  becomeUnBecome ! "still there?"
+  //becomeUnBecome ! PoisonPill  //build in kill message
   //becomeUnBecome ! "not any more"
 
   //PArent Child actors, parent create child, we call parent
@@ -136,11 +138,45 @@ object NdbControl extends App {
     router4 ! s"Hello $i"  //Load balances to ServiceActor with least messages
     Thread.sleep(100)
   }
-  println("scattergatherfirst")
+  //println("scattergatherfirst")
   //Send message to all actor, after first responds send message to rest to stop it.
   //Hmm for some reason  all actors responded and crashes after timeout
   //val router5 = actorSystem.actorOf(ScatterGatherFirstCompletedPool(5, within = 10.seconds).props(Props[ServiceActor]))
   //println(Await.result((router5 ? "hello").mapTo[String], 10 seconds))
+  // Tail chopping also ignores rest after first responds. Actors are randomly picked
   //val router6 = actorSystem.actorOf(TailChoppingPool(5, within = 10.seconds,interval = 20.millis).props(Props[ServiceActor]))
   //println(Await.result((router6 ? "hello").mapTo[String], 10 seconds))
+
+  // random pool, if you ont care which actor gets message
+  val router7 = actorSystem.actorOf(RandomPool(5).props(Props[ServiceActor]))
+  for (i <- 1 to 10) {
+    router7 ! s"Hello $i"
+    Thread.sleep(100)
+  }
+
+  //Caching and consistent hashing. If we want to cache over multiple nodes and make sure the same data is distributed the same way
+  //we will use hasing
+  def hashMapping: ConsistentHashMapping = {
+    case Evict(key) => key
+  }
+  val cache = actorSystem.actorOf(ConsistentHashingPool(10, hashMapping = hashMapping).props(Props[CacheActor]), name = "cache")
+  cache ! ConsistentHashableEnvelope(message = Entry("hello", "HELLO"), hashKey = "hello")
+  cache ! ConsistentHashableEnvelope(message = Entry("hi", "HI"), hashKey = "hi")
+  cache ! ConsistentHashableEnvelope(message = Entry("ahaaa", "MICHEL"), hashKey = "ahaaa")
+  cache ! Get("hello")
+  cache ! Get("hi")
+  cache ! Evict("hi")
+
+  //Special message to router
+  println("broadcast to router")
+  router7 ! Broadcast("Watch out for Davy Jones' locker")  //Send to actors
+  router7 ! PoisonPill //Kill router, which will will stop the children but poison is not send to children
+  router7 ! Broadcast(PoisonPill) //Router and children poison
+  router7 ! Kill //Send ActorKilledException , like poisonpill use Broadcast(Kill) to send kill to children also
+
+  //ResizablePool , will grow and shrink based on needs
+  println("load test")
+  val resizer = DefaultResizer(lowerBound = 2, upperBound = 15)
+  val router8 = actorSystem.actorOf(RoundRobinPool(5, Some(resizer)).props(Props[ServiceActor]))
+  router8 ! "some small load"
 }
