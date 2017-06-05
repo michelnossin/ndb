@@ -8,6 +8,7 @@ import com.nossin.ndb.messages.Messages.Service
   */
   class ServiceActor extends Actor {
     def receive = {
-      case Service => println("I provide a special service")
+      case Service => println("I provide a special service," + s" I am ${self.path.name}")
+      case msg => println(s"Message from Service Actor: ${msg} , " + s" I am ${self.path.name}")
     }
 }
