@@ -6,6 +6,7 @@ import akka.actor.{ActorRef, ActorSystem, Cancellable, PoisonPill, Props}
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.pattern.ask
+import akka.persistence.{Recovery, SnapshotSelectionCriteria}
 import akka.routing.ConsistentHashingRouter.{ConsistentHashMapping, ConsistentHashableEnvelope}
 import akka.routing._
 
@@ -246,5 +247,38 @@ object NdbControl extends App {
   val persistentActor2 = actorSystem.actorOf(Props[PersistenceActor])
   persistentActor2 ! "print"
   Thread.sleep(2000)
+  //actorSystem.terminate()
+
+  //Recovery of Actors
+  val hector = actorSystem.actorOf(FriendActor.props("Hector", Recovery()))
+  hector ! AddFriend(Friend("Laura"))
+  hector ! AddFriend(Friend("Nancy"))
+  hector ! AddFriend(Friend("Oliver"))
+  hector ! AddFriend(Friend("Steve"))
+  hector ! "snap"
+  hector ! RemoveFriend(Friend("Oliver"))
+  hector ! "print"
+  Thread.sleep(2000)
+  //actorSystem.terminate()
+
+  //recovery usi g snapshots and events replay
+  println("recovery of friend")
+  //val system = ActorSystem("test")
+  val hector2 = actorSystem.actorOf(FriendActor.props("Hector", Recovery()))
+  hector2 ! "print"
+  Thread.sleep(2000)
+
+  //recover using only events
+  val recovery3 = Recovery(fromSnapshot = SnapshotSelectionCriteria.None)
+  val hector3 = actorSystem.actorOf(FriendActor.props("Hector", recovery3))
+  hector3 ! "print"
+
+  //limit recovery
+  //val recovery = Recovery(fromSnapshot = SnapshotSelectionCriteria.None, replayMax = 3)
+  val recovery4 = Recovery(fromSnapshot = SnapshotSelectionCriteria.None, toSequenceNr = 2)
+  val hector4 = actorSystem.actorOf(FriendActor.props("Hector", recovery4))
+  hector4 ! "print"
+  Thread.sleep(2000)
+
   actorSystem.terminate()
 }
