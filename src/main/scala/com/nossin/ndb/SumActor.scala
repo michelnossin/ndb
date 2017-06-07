@@ -1,5 +1,8 @@
 package com.nossin.ndb
 import akka.actor.{Actor, ActorRef}
+import com.nossin.ndb.messages.Messages.Cancel
+import akka.actor.{Cancellable, Props, ActorSystem, Actor}
+import akka.actor.ActorSystem
 
 class SumActor extends Actor {
   // state inside the actor
@@ -15,6 +18,7 @@ class SumActor extends Actor {
     }
     case msg: String => println("received message as string: " + msg)
     // receives default message
+    //case Cancel => schedule.cancellable.cancel()
     case _ => println("I don't know what to do with this")
   }
 }

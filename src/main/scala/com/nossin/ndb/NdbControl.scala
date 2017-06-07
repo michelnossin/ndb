@@ -2,7 +2,7 @@ package com.nossin.ndb
 //import com.nossin.ndb.SupervisorActor
 //import akka.actor.Status.{Failure, Success}
 import scala.util.{Failure, Success}
-import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
+import akka.actor.{ActorRef, ActorSystem, Cancellable, PoisonPill, Props}
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -15,7 +15,7 @@ import akka.util.Timeout
 import com.nossin.ndb.custommailbox.{BecomeActor, Logger, PriorityActor, ProxyActor}
 import com.nossin.ndb.messages.Hashing.{Entry, Evict, Get}
 import com.nossin.ndb.messages.{CustomControlMessage, Stop}
-import com.nossin.ndb.messages.Messages.{CreateChild, Error, Kill, Send, Service, Start, StopActor}
+import com.nossin.ndb.messages.Messages.{Cancel, CreateChild, Error, Kill, Send, Service, Start, StopActor}
 
 object NdbControl extends App {
 	val actorSystem = ActorSystem("NdbControl")
@@ -208,4 +208,21 @@ object NdbControl extends App {
     case Failure(fail) => fail.printStackTrace()
   }
   println("Executed before callback")
+
+  //Reduce futures list
+  val listOfFutures = (1 to 10).map(Future(_))
+  val finalFuture2 = Future.reduce(listOfFutures)(_ + _)
+  println(s"sum of numbers from 1 to 10 is ${Await.result(finalFuture2, 10 seconds)}")
+
+  //scheduling
+  actorSystem.scheduler.scheduleOnce(10 seconds) { println(s"Sum of (1 + 2) is ${1 + 2}")}
+  //actorSystem.scheduler.schedule(11 seconds, 2 seconds) { println(s"Hello, Sorry for disturbing you every 2 seconds") }
+
+  //Do the same with actors
+  actorSystem.scheduler.scheduleOnce(10 seconds, sumActor, 4)
+  //val cancellable: Cancellable =  actorSystem.scheduler.schedule(11 seconds, 2 seconds, sumActor, 8)
+
+  //To cancel, your schedule should be of type Cancellable
+  //Thread.sleep(10000)
+  //sumActor ! Cancel
 }
