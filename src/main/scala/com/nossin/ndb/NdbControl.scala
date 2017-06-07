@@ -1,8 +1,11 @@
 package com.nossin.ndb
 //import com.nossin.ndb.SupervisorActor
+//import akka.actor.Status.{Failure, Success}
+import scala.util.{Failure, Success}
 import akka.actor.{ActorRef, ActorSystem, PoisonPill, Props}
 
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 import akka.pattern.ask
 import akka.routing.ConsistentHashingRouter.{ConsistentHashMapping, ConsistentHashableEnvelope}
 import akka.routing._
@@ -179,4 +182,30 @@ object NdbControl extends App {
   val resizer = DefaultResizer(lowerBound = 2, upperBound = 15)
   val router8 = actorSystem.actorOf(RoundRobinPool(5, Some(resizer)).props(Props[ServiceActor]))
   router8 ! "some small load"
+
+  //Futures , to handle operations on another thread. Results can be obtained synchronious by blocking the thread,
+  //or using futures:
+  val future2 = Future(1+2).mapTo[Int]
+  val sum = Await.result(future2, 10 seconds)
+  println(s"Future Result $sum")
+  val future3 = (FibActor ? 3 ).mapTo[Int]
+  val sum2 = Await.result(future3, 10 seconds)
+  println(s"Future Result Fibonacci $sum2")
+
+  //Use for comprehension to browse futures like lists
+  val futureA = Future(20 + 20)
+  val futureB = Future(30 + 30)
+  val finalFuture: Future[Int] = for {
+    a <- futureA
+    b <- futureB
+  } yield a + b
+  println("Future result is " + Await.result(finalFuture, 1 seconds))
+
+  //future callback for async
+  val future4 = Future(1 + 2).mapTo[Int]
+  future4 onComplete {
+    case Success(result) => println(s"result is $result")
+    case Failure(fail) => fail.printStackTrace()
+  }
+  println("Executed before callback")
 }
