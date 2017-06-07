@@ -12,7 +12,8 @@ class CalculatorActor(printer: ActorRef) extends Actor {
       println("Calculator : I am restarting because of ArithmeticException")
         }
   def receive = {
-    case Add(a, b) => printer ! s"sum is ${a + b}"
-    case Sub(a, b) => printer ! s"diff is ${a - b}"
-    case Div(a, b) => printer ! s"div is ${a / b}" }
+    case com.nossin.ndb.messages.Calculator.Add(a, b) => printer ! s"sum is ${a + b}"
+    case com.nossin.ndb.messages.Calculator.Sub(a, b) => printer ! s"diff is ${a - b}"
+    case com.nossin.ndb.messages.Calculator.Div(a, b) => printer ! s"div is ${a / b}" }
 }
+

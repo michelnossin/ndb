@@ -254,3 +254,13 @@ Akka actors, as components, have a life cycle-you can start, stop, restart and k
 
 Asynchronous message passing allows us to put a boundary between two actors so as to separate the concerns of the different components
 
+======= Persistance =====
+
+PersistentActor: A stateful actor that persists events to the journal. When a persistent actor is started or restarted, journaled messages are replayed to that actor so that it can recover the internal state from these messages.
+
+AsyncWriteJournal: A journal keeps an ordered collection of events that can be sent to a persistent actor. An application can control which messages are journaled and which are received by the persistent actor without being journaled. The data store behind the journal is configurable and needs to be decided depending on the needs. By default, Akka persistence comes with a LevelDB journal plugin (which uses the local filesystem and is not replicated). 
+
+AtLeastOnceDelivery: A messaging delivery mechanism that ensures at-least-once delivery semantics to destinations.
+Snapshot store: A snapshot store persists snapshots of a persistent actor's. Snapshots are used to speed up recovery time from the journal. The data store behind the snapshot store is configurable (the same as the journal) and uses the local filesystem as the default.
+
+

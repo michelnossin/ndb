@@ -1,7 +1,7 @@
 package com.nossin.ndb
 
 import akka.actor.{Actor, ActorRef, Props}
-import com.nossin.ndb.messages.Messages.{CreateChild, DoubleValue, Response, Send}
+import com.nossin.ndb.messages.Messages.{CreateChild, DoubleValue, Response,Send}
 /**
   * Created by michelnossin on 05-06-17.
   */

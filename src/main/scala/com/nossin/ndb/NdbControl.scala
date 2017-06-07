@@ -231,4 +231,20 @@ object NdbControl extends App {
   val config: Config = ConfigFactory.load("application.conf")
   val iq = config.getString("michel.iq")
   println(s"michel iq is ${iq}")
+
+  //Using persistence Actor
+  println("Using persistence actor")
+  val persistentActor1 = actorSystem.actorOf(Props[PersistenceActor])
+  persistentActor1 ! UserUpdate("foo", Add)
+  persistentActor1 ! UserUpdate("baz", Add)
+  persistentActor1 ! "snap"
+  persistentActor1 ! "print"
+  persistentActor1 ! UserUpdate("baz", Remove)
+  persistentActor1 ! "print"
+  Thread.sleep(2000)
+  actorSystem.stop(persistentActor1)
+  val persistentActor2 = actorSystem.actorOf(Props[PersistenceActor])
+  persistentActor2 ! "print"
+  Thread.sleep(2000)
+  actorSystem.terminate()
 }
