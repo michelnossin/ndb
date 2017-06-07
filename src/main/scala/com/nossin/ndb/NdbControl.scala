@@ -1,6 +1,5 @@
 package com.nossin.ndb
-//import com.nossin.ndb.SupervisorActor
-//import akka.actor.Status.{Failure, Success}
+
 import scala.util.{Failure, Success}
 import akka.actor.{ActorRef, ActorSystem, Cancellable, PoisonPill, Props}
 
@@ -16,6 +15,7 @@ import com.nossin.ndb.custommailbox.{BecomeActor, Logger, PriorityActor, ProxyAc
 import com.nossin.ndb.messages.Hashing.{Entry, Evict, Get}
 import com.nossin.ndb.messages.{CustomControlMessage, Stop}
 import com.nossin.ndb.messages.Messages.{Cancel, CreateChild, Error, Kill, Send, Service, Start, StopActor}
+import com.typesafe.config.{Config, ConfigFactory}
 
 object NdbControl extends App {
 	val actorSystem = ActorSystem("NdbControl")
@@ -225,4 +225,10 @@ object NdbControl extends App {
   //To cancel, your schedule should be of type Cancellable
   //Thread.sleep(10000)
   //sumActor ! Cancel
+  logActor ! "how are"
+
+  //How to read config file. Put a .conf file in src/main/resources and add some yaml.
+  val config: Config = ConfigFactory.load("application.conf")
+  val iq = config.getString("michel.iq")
+  println(s"michel iq is ${iq}")
 }
