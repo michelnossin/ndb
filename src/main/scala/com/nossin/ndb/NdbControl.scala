@@ -6,9 +6,13 @@ import akka.actor.{ActorRef, ActorSystem, Cancellable, PoisonPill, Props}
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.pattern.ask
+import akka.persistence.query.PersistenceQuery
+import akka.persistence.query.journal.leveldb.scaladsl.LeveldbReadJournal
 import akka.persistence.{Recovery, SnapshotSelectionCriteria}
 import akka.routing.ConsistentHashingRouter.{ConsistentHashMapping, ConsistentHashableEnvelope}
 import akka.routing._
+import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.Sink
 
 import scala.concurrent.duration._
 import akka.util.Timeout
@@ -280,5 +284,45 @@ object NdbControl extends App {
   hector4 ! "print"
   Thread.sleep(2000)
 
+  //Fsm , finit state actor to persist data
+  def createActor(id: String) =  actorSystem.actorOf(FsmActor.props(id))
+
+  val actorx = createActor("uid1")
+  actorx ! Initialize(4)
+  actorx ! Mark
+  actorx ! Mark
+  Thread.sleep(2000)
+  actorSystem.stop(actorx)
+  println("new actor same fsm")
+  val actory = createActor("uid1")
+  Thread.sleep(2000)
+  actory ! Mark
+  actory ! Mark
+
+  //import system.dispatcher
+  //Lets use persistence query to get all events
+  implicit val mat = ActorMaterializer()(actorSystem)
+  val queries = PersistenceQuery(actorSystem).readJournalFor[LeveldbReadJournal](LeveldbReadJournal.Identifier)
+  println(" adding some friends")
+  val laura = actorSystem.actorOf(FriendActor.props("Laura", Recovery()))
+  val maria = actorSystem.actorOf(FriendActor.props("Maria", Recovery()))
+  laura ! AddFriend(Friend("Hector"))
+  laura ! AddFriend(Friend("Nancy"))
+  maria ! AddFriend(Friend("Oliver"))
+  maria ! AddFriend(Friend("Steve"))
+  Thread.sleep(2000)
+  actorSystem.scheduler.scheduleOnce(5 second, maria, AddFriend(Friend("Steve")))
+  actorSystem.scheduler.scheduleOnce(10 second, maria, RemoveFriend(Friend("Oliver")))
+  Thread.sleep(2000)
+
+  print ("Query the event source logs")
+  queries.allPersistenceIds().map(id => actorSystem.log.info(s"Id received [$id]")).to(Sink.ignore).run()
+  queries.eventsByPersistenceId("Laura").map(e => log(e.persistenceId, e.event)).to(Sink.ignore).run()
+  queries.eventsByPersistenceId("Maria").map(e => log(e.persistenceId, e.event)).to(Sink.ignore).run()
+  Thread.sleep(2000)
+  
+    def log(id: String, evt: Any) = actorSystem.log.info(s"Id [$id] Event [$evt]")
+
   actorSystem.terminate()
+
 }

@@ -21,5 +21,13 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.1"
 )
 
+//akka persistence icw leveldb , local db
 libraryDependencies += "com.typesafe.akka" % "akka-persistence_2.11" % "2.4.17"
 libraryDependencies += "org.iq80.leveldb"  % "leveldb" % "0.7"
+libraryDependencies += "org.fusesource.leveldbjni"  % "leveldbjni-all"   % "1.8"
+
+//akka persistence with  for redis:
+//resolvers += Resolver.jcenterRepo
+//libraryDependencies += "com.hootsuite" %% "akka-persistence-redis" % "0.6.0"
+
+libraryDependencies +=  "com.typesafe.akka" %% "akka-persistence-query-experimental" % "2.4.17"
