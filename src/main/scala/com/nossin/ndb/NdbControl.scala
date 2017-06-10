@@ -320,9 +320,14 @@ object NdbControl extends App {
   queries.eventsByPersistenceId("Laura").map(e => log(e.persistenceId, e.event)).to(Sink.ignore).run()
   queries.eventsByPersistenceId("Maria").map(e => log(e.persistenceId, e.event)).to(Sink.ignore).run()
   Thread.sleep(2000)
-  
-    def log(id: String, evt: Any) = actorSystem.log.info(s"Id [$id] Event [$evt]")
+
+  def log(id: String, evt: Any) = actorSystem.log.info(s"Id [$id] Event [$evt]")
+
+  //Akka remote (akka protocol for peer to peer connection actors on different machines and jvm
+  //and akka clustering, gossip protocol, actors are member of a cluster handling HA
+  //Use run configurations, or use sbt, start actors in this order:
+  //sbt -Dconfig.resource=application-1.conf "runMain com.nossin.ndb.HelloAkkaRemoting1"
+  //sbt -Dconfig.resource=application-2.conf "runMain com.nossin.ndb.HelloAkkaRemoting2"
 
   actorSystem.terminate()
-
 }

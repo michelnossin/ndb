@@ -31,3 +31,6 @@ libraryDependencies += "org.fusesource.leveldbjni"  % "leveldbjni-all"   % "1.8"
 //libraryDependencies += "com.hootsuite" %% "akka-persistence-redis" % "0.6.0"
 
 libraryDependencies +=  "com.typesafe.akka" %% "akka-persistence-query-experimental" % "2.4.17"
+
+//libraryDependencies +=  "com.typesafe.akka" %% "akka-remote_2.11" % "2.4.17"
+libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.4.17"

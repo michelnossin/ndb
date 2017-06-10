@@ -18,4 +18,5 @@ object Messages {
   case object Service
   case object Kill
   case object Cancel
+  case object showAddress
 }

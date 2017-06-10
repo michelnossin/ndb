@@ -11,6 +11,7 @@ class ResultPrinterActor extends Actor {
     println("Printer : I am restarting as well")
   }
   def receive = {
-    case msg => println(msg)
+    case msg:String => println(s"message ${msg}")
+    case showAddress => println(s"I have been created at ${self.path.address.hostPort}")
   }
 }
