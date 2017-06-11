@@ -325,9 +325,19 @@ object NdbControl extends App {
 
   //Akka remote (akka protocol for peer to peer connection actors on different machines and jvm
   //and akka clustering, gossip protocol, actors are member of a cluster handling HA
+
   //Use run configurations, or use sbt, start actors in this order:
   //sbt -Dconfig.resource=application-1.conf "runMain com.nossin.ndb.HelloAkkaRemoting1"
   //sbt -Dconfig.resource=application-2.conf "runMain com.nossin.ndb.HelloAkkaRemoting2"
+  //result: calling actor on system 2 will create the actor on system 1
+
+  //To check if an actor is running on remote server:
+  //sbt -Dconfig.resource=application-2.conf "runMain com.nossin.ndb.LookingUpRemoteActors"
+  //sbt -Dconfig.resource=application-1.conf "runMain com.nossin.ndb.HelloAkkaRemoting3"
+
+  //Now lets go back to first example but deploy actor using code. We have an empty actorsystem, and create our actor from remoteactors
+  //sbt -Dconfig.resource=application-1.conf "runMain com.nossin.ndb.MyActorSystem"
+  //sbt -Dconfig.resource=application-2.conf "runMain com.nossin.ndb.RemoteActors"
 
   actorSystem.terminate()
 }
