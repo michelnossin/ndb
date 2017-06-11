@@ -345,5 +345,11 @@ object NdbControl extends App {
   //sbt -Dconfig.resource=application-3.conf "runMain com.nossin.ndb.chat.ChatClientApplication"
   //Result: The 2 clients see eachother's messages. But disconnect does not work?
 
+  //Akka cluster, publish , subscribe using akka cluster
+  //sbt -Dconfig.resource=application-cluster-1.conf "runMain com.nossin.ndb.cluster.DistributedPubSubApplication"
+  //sbt -Dconfig.resource=application-cluster-2.conf "runMain com.nossin.ndb.cluster.DistributedPubSubApplication"
+  //Result: Both applications create his own set of publish and subscriber actors. They all use the same cluster and topic.
+  //Therefor all published messages are received by both subscribers.
+
   actorSystem.terminate()
 }
