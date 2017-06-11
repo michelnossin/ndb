@@ -339,5 +339,11 @@ object NdbControl extends App {
   //sbt -Dconfig.resource=application-1.conf "runMain com.nossin.ndb.MyActorSystem"
   //sbt -Dconfig.resource=application-2.conf "runMain com.nossin.ndb.RemoteActors"
 
+  //Chat system using same principle:
+  //sbt -Dconfig.resource=application-1.conf "runMain com.nossin.ndb.chat.ChatServerApplication"
+  //sbt -Dconfig.resource=application-2.conf "runMain com.nossin.ndb.chat.ChatClientApplication"
+  //sbt -Dconfig.resource=application-3.conf "runMain com.nossin.ndb.chat.ChatClientApplication"
+  //Result: The 2 clients see eachother's messages. But disconnect does not work?
+
   actorSystem.terminate()
 }
