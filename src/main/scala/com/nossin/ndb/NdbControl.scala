@@ -351,5 +351,17 @@ object NdbControl extends App {
   //Result: Both applications create his own set of publish and subscriber actors. They all use the same cluster and topic.
   //Therefor all published messages are received by both subscribers.
 
+  //Cluster sharding:
+  //Akka Cluster Sharding is a helper module that automatically distributes actors across multiple cluster nodes. These actors have
+  //an identifier and they are commonly known as entities. Each actor entity runs only at one location, and you can interact with them through
+  // the ClusterSharding extension. A shard is a group of entities that is managed together through an EntityId.
+  //Cluster Sharding takes care of routing the message to the expected destination, so you don't need to know where the actors are running.
+  // It needs a persistent store to store actor information. We will configure our app to use the distributed data store, which will be the
+  // default as of Akka 2.5.0. We will learn more about distributed data in the next recipe.Cluster Sharding is used when you have
+  // stateful actors where the size of the state does not fit the memory of a single machine. We can easily scale an application beyond a
+  // single machine, thanks to Cluster Sharding.
+
+
+
   actorSystem.terminate()
 }
