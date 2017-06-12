@@ -36,3 +36,6 @@ libraryDependencies +=  "com.typesafe.akka" %% "akka-persistence-query-experimen
 libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.4.17"
 
 libraryDependencies += "com.typesafe.akka" % "akka-cluster-tools_2.11" % "2.4.17"
+
+libraryDependencies += "com.typesafe.akka" % "akka-cluster-sharding_2.11" % "2.4.17"
+libraryDependencies += "com.typesafe.akka" % "akka-distributed-data-experimental_2.11" % "2.4.17"

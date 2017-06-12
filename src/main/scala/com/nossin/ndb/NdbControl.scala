@@ -361,7 +361,17 @@ object NdbControl extends App {
   // stateful actors where the size of the state does not fit the memory of a single machine. We can easily scale an application beyond a
   // single machine, thanks to Cluster Sharding.
 
+  //Scala cluster without hassle
+  //sbt -Dconfig.resource=application-cluster-sharding-1.conf "runMain com.nossin.ndb.ClusterShardingApplication"
+  //sbt -Dconfig.resource=application-cluster-sharding-2.conf "runMain com.nossin.ndb.ClusterShardingApplication"
 
+  //Distributed Data application. Replicate data withoug any hassle
+  //sbt -Dconfig.resource=application-cluster-sharding-1.conf "runMain com.nossin.ndb.DistributedDataApplication"
+  //sbt -Dconfig.resource=application-cluster-sharding-2.conf "runMain com.nossin.ndb.DistributedDataApplication"
+
+  //SingletonActor (if you want 1 actor max with HA. Start 1, start 2, stop 1 and see how singleton moves to 2
+  //sbt -Dconfig.resource=application-cluster-autodown-1.conf "runMain com.nossin.ndb.ClusterSingletonApplication"
+  //sbt -Dconfig.resource=application-cluster-autodown-2.conf "runMain com.nossin.ndb.ClusterSingletonApplication"
 
   actorSystem.terminate()
 }
