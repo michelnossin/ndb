@@ -373,5 +373,8 @@ object NdbControl extends App {
   //sbt -Dconfig.resource=application-cluster-autodown-1.conf "runMain com.nossin.ndb.ClusterSingletonApplication"
   //sbt -Dconfig.resource=application-cluster-autodown-2.conf "runMain com.nossin.ndb.ClusterSingletonApplication"
 
+  //Simple streams application
+  //sbt "runMain com.nossin.ndb.SimpleStreamsApplication"
+
   actorSystem.terminate()
 }
